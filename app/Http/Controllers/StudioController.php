@@ -2,31 +2,103 @@
 
 namespace App\Http\Controllers;
 
-use App\Studio;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use App\Studio;
 
+/**
+* Controller for Studio entity.
+*/
 class StudioController extends Controller
 {
-    public function create(Request $request) {
-        $json = json_decode( $request->json,true);
-        $item = Studio::find($json['Studio_ID']);
-        $item->Name = isset($json['studio_name']) ? $json['studio_name'] : null;
-        $item->ABN = isset($json['studio_abn']) ? $json['studio_abn'] : null;
-        $item->Addr1 = isset($json['studio_addr_1']) ? $json['studio_addr_1'] : null;
-        $item->Addr2 = isset($json['studio_addr_2']) ? $json['studio_addr_2'] : null;
-        $item->Suburb = isset($json['studio_suburb']) ? $json['studio_suburb'] : null;
-        $item->Pcode = isset($json['studio_pcode']) ? $json['studio_pcode'] : null;
-        $item->State = isset($json['studio_state']) ? $json['studio_state'] : null;
-        $item->Phone = isset($json['studio_phone']) ? $json['studio_phone'] : null;
-        $item->Fax = isset($json['studio_fax']) ? $json['studio_fax'] : null;
-        $item->Email = isset($json['studio_email']) ? $json['studio_email'] : null;
-        $item->Logo = isset($json['studio_logo']) ? $json['studio_logo'] : null;
-        $item->Status = isset($json['studio_status']) ? $json['studio_status'] : null;
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return Studio::orderBy('studio_ID', 'asc')->get();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {   
+        $this->validate($request, [
+            'name' => 'required|unique:studio_details,studio_name',
+            'abn' => 'required|digits:11',
+            'addr_1' => 'required',
+            'suburb' => 'required',
+            'state' => 'required',
+            'pcode' => 'required|digits:4',
+            'phone' => 'required|numeric',
+            'fax' => 'numeric',
+            'email' => 'required|email',
+            ]);
+        $item = new Studio;
+        $item = $this->assignProperties($item, $request);
         $item->save();
         return response()->json($item);
         return 'OK';
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return Studio::find($id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $item = Studio::find($id);
+        $item = $this->assignProperties($re, $json);
+        $item->save();
+        return response()->json($item);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $studio = Studio::find($request->id);
+        $studio->delete();
+        return 'OK';
+    }
+    
+    private function assignProperties(Studio $item, Request $request) {
+        $item->studio_name = $request->input('name');
+        $item->studio_abn = $request->input('abn');
+        $item->studio_addr_1 = $request->input('addr_1');
+        $item->studio_addr_2 = $request->input('addr_2');
+        $item->studio_suburb = $request->input('suburb');
+        $item->studio_pcode = $request->input('pcode');
+        $item->studio_state = $request->input('state');
+        $item->studio_phone = $request->input('phone');
+        $item->studio_fax = $request->input('fax');
+        $item->studio_email = $request->input('email');
+        $item->studio_logo = $request->input('logo');
+        $item->studio_status = $request->input('status');
+        return $item;
+    }
 }
-
-
