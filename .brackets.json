@@ -1,5 +1,6 @@
 {
     "jscodehints.detectedExclusions": [
-        "/Users/macowner/NetBeansProjects/BrisbaneLashes/resources/assets/js/bootstrap.js"
+        "/Users/macowner/NetBeansProjects/BrisbaneLashes/resources/assets/js/controllers/masterLoginController.js",
+        "/Users/macowner/NetBeansProjects/BrisbaneLashes/public/bower_resources/jquery/src/manipulation/buildFragment.js"
     ]
 }

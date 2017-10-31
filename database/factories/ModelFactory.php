@@ -22,3 +22,19 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Studio::class, function (Faker\Generator $faker) {
+    
+    return [
+        'studio_name' => $faker->unique()->company,
+        'studio_abn' =>  $faker->unique()->randomNumber($nbDigits = 11),
+        'studio_addr1' => $faker->unique()->streetAddress,
+        'studio_addr2' => $faker->unique()->optional()->secondaryAddress,
+        'studio_suburb' => $faker->city,
+        'studio_pcode' => $faker->randomNumber($nbDigits = 4),
+        'studio_state' => $faker->state,
+        'studio_phone' => $faker->e164PhoneNumber,
+        'studio_email' => $faker->unique()->safeEmail,
+        'studio_fax' => $faker->unique()->optional()->e164PhoneNumber
+    ];
+});
