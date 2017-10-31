@@ -1,0 +1,20 @@
+<div id="studio-view" class="col-md-4 col-md-offset-4"> 
+    <h4>{{studioData.name}}</h4>
+    <table>
+        <tr ng-repeat="(key, value) in studioData">
+            <td> {{key}} </td> <td> {{ value }} </td>
+        </tr>
+    </table>
+    <h4>Login</h4> 
+    <form ng-submit="loginSubmit()">
+        <div class="form-group">
+            <input id="email" name="email" ng-model="loginData.email" type="text" />
+        </div> <!--password--> 
+        <div class="form-group">
+            <input id="password" name="password" ng-model="loginData.password" type="password" />
+        </div> <!--submit-->
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Login</button>
+        </div> 
+    </form>
+</div>
