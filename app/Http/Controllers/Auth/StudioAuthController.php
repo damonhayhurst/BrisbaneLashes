@@ -14,7 +14,7 @@ class StudioAuthController extends Controller {
         $token = null;
         try {
             if (!$token = \JWTAuth::attempt($credentials,
-                                            ['acs' => 's', 'sid' => $request->'studio_id']))
+                                            ['acs' => 's', 'sid' => $request->only('studio_id')]))
             {
                 return response()->json([
                     'error' => $credentials

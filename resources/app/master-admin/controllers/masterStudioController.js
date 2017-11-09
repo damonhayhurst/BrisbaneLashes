@@ -11,12 +11,9 @@ admin.controller('MasterStudioController', ['$scope', '$http', 'Studio', 'Satell
     };
     
     $scope.submit = function() {
-        Studio.save($scope.studioData)
-            .success(function(data) {
-                console.log(":))");
-            })
-            .error(function(data) {
-                console.log(data);
+        Studio.save($scope.studioData).$promise.then(
+            function successCallback() {
+                $state.go('admin.listStudios');
             });
     };
     
@@ -29,6 +26,10 @@ admin.controller('MasterStudioController', ['$scope', '$http', 'Studio', 'Satell
     
     $scope.viewPublic = function(id) {
         $state.go('studio', {id: id});
+    }
+    
+    $scope.add = function() {
+        $state.go('admin.addStudio');
     }
     
 }]);

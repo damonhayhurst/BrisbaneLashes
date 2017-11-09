@@ -1,0 +1,77 @@
+<page-title title="Studio Information"></page-title>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <h4 class="m-t-0 header-title"><b>Studio Details</b></h4>
+            <p class="text-muted m-b-30 font-13">
+                Edit details about the studio
+            </p>
+            <div class="row">
+				<form class="form-horizontal" role="form" ng-submit="update()">                                    
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="name" ng-model="studioData.name" placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">ABN</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="abn" ng-model="studioData.abn" placeholder="ABN">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Address Line 1</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="addr_1" ng-model="studioData.addr_1" placeholder="Address Line One">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Address Line 2</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="addr_2" ng-model="studioData.addr_2" placeholder="Address Line Two">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Suburb</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="suburb" ng-model="studioData.suburb" placeholder="Suburb">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">State</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="state" ng-model="studioData.state" placeholder="State">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Postcode</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="pcode" ng-model="studioData.pcode" placeholder="Postcode">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Phone</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="phone" ng-model="studioData.phone" placeholder="Phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Email</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="email" ng-model="studioData.email" placeholder="Email">
+                            </div>
+                        </div>
+
+                <div class="form-group text-right">   
+                    <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                </div>
+            </form>
+                
+
+
+            </div>
+        </div>
+    </div>
+</div>

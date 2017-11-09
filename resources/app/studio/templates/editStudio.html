@@ -1,46 +1,229 @@
-<div id="edit-studio" class="col-md-4 col-md-offset-4"> 
-    <div id="edit-studio-form">
-        <h4>Edit Studio {{studio.name}}</h4> 
-        <form ng-submit="update()">
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="name" ng-model="studioData.name" placeholder="Name">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="abn" ng-model="studioData.abn" placeholder="ABN">
-                </div>
-             
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="addr_1" ng-model="studioData.addr_1" placeholder="Address Line One">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="addr_2" ng-model="studioData.addr_2" placeholder="Address Line Two">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="suburb" ng-model="studioData.suburb" placeholder="Suburb">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="state" ng-model="studioData.state" placeholder="State">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="pcode" ng-model="studioData.pcode" placeholder="Postcode">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="phone" ng-model="studioData.phone" placeholder="Phone">
-                </div>
-                
-                <div class="form-group">
-                    <input type="text" class="form-control input-lg" name="email" ng-model="studioData.email" placeholder="Email">
-                </div>
+
+<!--
+<div id="list-studios" class="col-md-4 col-md-offset-4"> 
+        <h4>Studio List</h4>
+        <li class="studio-info" ng-repeat="studio in studios">
+            {{studio.name}} Edit <a ng-click="viewPublic(studio.id)"> View </a>
+        </li>
+</div>
+-->
+    <div top-bar></div>
+
+
+            <div left-side-bar></div>
+
+			<!-- ============================================================== -->
+			<!-- Start right Content here -->
+			<!-- ============================================================== -->
+			<div class="content-page">
+				<!-- Start content -->
+				<div class="content">
+					<div class="container">
+
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="card-box">
+									<div class="row">
+										<div class="col-lg-12">
+											<h4 class="m-t-0 header-title"><b>{{studioData.name}} Admin</b></h4>
+											<p class="text-muted font-13">
+												For basic styling—light padding and only horizontal dividers—add the base class <code>.table</code> to any <code>&lt;table&gt;</code>.
+											</p>
+											
+											<div class="p-20">
+												<form class="form-horizontal" role="form" ng-submit="update()">                                    
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="name" ng-model="studioData.name" placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">ABN</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="abn" ng-model="studioData.abn" placeholder="ABN">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Address Line 1</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="addr_1" ng-model="studioData.addr_1" placeholder="Address Line One">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Address Line 2</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="addr_2" ng-model="studioData.addr_2" placeholder="Address Line Two">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Suburb</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="suburb" ng-model="studioData.suburb" placeholder="Suburb">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">State</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="state" ng-model="studioData.state" placeholder="State">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">State</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="pcode" ng-model="studioData.pcode" placeholder="Postcode">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Phone</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="phone" ng-model="studioData.phone" placeholder="Phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-email">Phone</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control input-lg" name="email" ng-model="studioData.email" placeholder="Email">
+                            </div>
+                        </div>
 
                 <div class="form-group text-right">   
                     <button type="submit" class="btn btn-primary btn-lg">Update</button>
                 </div>
             </form>
-    </div> 
-</div> 
+											</div>
+
+										</div>
+										
+										
+									</div>
+								</div>
+							</div>
+						</div>
+
+                       
+
+
+                    </div> <!-- container -->
+                               
+                </div> <!-- content -->
+
+                <footer class="footer">
+                    2015 © Ubold.
+                </footer>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
+
+            <!-- Right Sidebar -->
+            <div class="side-bar right-bar nicescroll">
+                <h4 class="text-center">Chat</h4>
+                <div class="contact-list nicescroll">
+                    <ul class="list-group contacts-list">
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-1.jpg" alt="">
+                                </div>
+                                <span class="name">Chadengle</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-2.jpg" alt="">
+                                </div>
+                                <span class="name">Tomaslau</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-3.jpg" alt="">
+                                </div>
+                                <span class="name">Stillnotdavid</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-4.jpg" alt="">
+                                </div>
+                                <span class="name">Kurafire</span>
+                                <i class="fa fa-circle online"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-5.jpg" alt="">
+                                </div>
+                                <span class="name">Shahedk</span>
+                                <i class="fa fa-circle away"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-6.jpg" alt="">
+                                </div>
+                                <span class="name">Adhamdannaway</span>
+                                <i class="fa fa-circle away"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-7.jpg" alt="">
+                                </div>
+                                <span class="name">Ok</span>
+                                <i class="fa fa-circle away"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-8.jpg" alt="">
+                                </div>
+                                <span class="name">Arashasghari</span>
+                                <i class="fa fa-circle offline"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-9.jpg" alt="">
+                                </div>
+                                <span class="name">Joshaustin</span>
+                                <i class="fa fa-circle offline"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="#">
+                                <div class="avatar">
+                                    <img src="assets/images/users/avatar-10.jpg" alt="">
+                                </div>
+                                <span class="name">Sortino</span>
+                                <i class="fa fa-circle offline"></i>
+                            </a>
+                            <span class="clearfix"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /Right-bar -->

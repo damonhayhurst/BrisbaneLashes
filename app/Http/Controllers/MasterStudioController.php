@@ -34,7 +34,7 @@ class MasterStudioController extends Controller
      */
     public function store(Request $request)
     {   
-        $this->validateProperties($request);
+//        $this->validateProperties($request);
         $item = new Studio;
         $item = $this->assignProperties($item, $request);
         $item->save();
@@ -62,7 +62,7 @@ class MasterStudioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validateProperties($request);
+//        $this->validateProperties($request);
         $item = Studio::find($id);
         $item = $this->assignProperties($re, $json);
         $item->save();

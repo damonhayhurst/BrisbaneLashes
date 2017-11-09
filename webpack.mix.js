@@ -17,5 +17,6 @@ mix.js(['resources/app/master-admin/module.js', 'resources/app/studio/module.js'
 mix.combine(['resources/app/master-admin/module.js', 'resources/app/studio/module.js', 'resources/app/app.js'], 'public/app/app.js');
 mix.combine(['resources/app/*/controllers/*'], 'public/app/controllers.js');
 mix.combine(['resources/app/*/services/*'], 'public/app/services.js');
+mix.combine(['resources/app/*/directives/*'], 'public/app/directives.js');
 mix.copy(['resources/app/master-admin/templates'], 'public/app/templates');
 mix.copy(['resources/app/studio/templates'], 'public/app/templates');

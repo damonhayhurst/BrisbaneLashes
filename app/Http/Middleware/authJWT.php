@@ -44,9 +44,9 @@ class authJWT
         if ($payload['acs'] != self::determineAccess($access)) {
             return response()->json(['error' => 'Unable to access'], 403);
         }
-        if ($payload['acs'] == self::STUDIO_STAFF && $payload['sid'] != $user->id) {
-            return response()->json(['error' => 'Unable to access'.$user->id], 403);
-        }
+//        if ($payload['acs'] == self::STUDIO_STAFF && implode($payload['sid']) != $user->studio_id) {
+//            return response()->json(['error' => 'Unable to access'], 403);
+//        }
         
         return $next($request);
     }

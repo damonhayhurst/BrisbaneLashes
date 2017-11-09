@@ -5,6 +5,9 @@ admin.controller('MasterLoginController', ['$scope', '$auth', '$state', 'Satelli
     $scope.loginSubmit = function(){
         $auth.login($scope.loginData).then(function(data) {
             $state.go('admin.listStudios', {});
+        },
+                                          function(error) {
+            $state.go('403');
         });
     };
 }]);
