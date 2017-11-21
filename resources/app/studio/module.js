@@ -1,6 +1,7 @@
 var studio = angular.module('studio', ['ngResource',
                                             'ui.router',
-                                            'satellizer'
+                                            'satellizer',
+                                            'ui.calendar'
                                             ]);
 
 
@@ -84,10 +85,16 @@ studio.config(function($stateProvider, $urlRouterProvider, $authProvider, $locat
         })
         .state('studio.studioStaff.manageProfile', {
             url: '/profile',
-            templateUrl: 'app/templates/studioStaffManageProfile.html',
-            controller: 'StudioStaffManageProfileController'
+            templateUrl: 'app/templates/publicProfile.html',
+            controller: 'StudioProfileController'
         })
 });
 
 //Resource Factories
+studio.factory('Appointment', function($resource) {
+    return $resource('api/appointments/:id');
+});
 
+studio.factory('Customer', function($resource) {
+    return $resource('api/customers/:id');
+});

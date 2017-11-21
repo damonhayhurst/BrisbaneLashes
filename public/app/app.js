@@ -10,7 +10,7 @@ admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locati
     
     // Satellizer configuration that specifies which API
     // route the JWT should be retrieved from
-    $authProvider.loginUrl = 'api/auth/studio';
+    $authProvider.loginUrl = 'api/auth/master';
     
     $stateProvider
         .state('login', {
@@ -44,7 +44,8 @@ admin.factory('Studio', function($resource) {
 });
 var studio = angular.module('studio', ['ngResource',
                                             'ui.router',
-                                            'satellizer'
+                                            'satellizer',
+                                            'ui.calendar'
                                             ]);
 
 
@@ -128,13 +129,19 @@ studio.config(function($stateProvider, $urlRouterProvider, $authProvider, $locat
         })
         .state('studio.studioStaff.manageProfile', {
             url: '/profile',
-            templateUrl: 'app/templates/studioStaffManageProfile.html',
-            controller: 'StudioStaffManageProfileController'
+            templateUrl: 'app/templates/publicProfile.html',
+            controller: 'StudioProfileController'
         })
 });
 
 //Resource Factories
+studio.factory('Appointment', function($resource) {
+    return $resource('api/appointments/:id');
+});
 
+studio.factory('Customer', function($resource) {
+    return $resource('api/customers/:id');
+});
 
 var app = angular.module('brisbaneLashes', ['masterAdmin', 'studio']);
 

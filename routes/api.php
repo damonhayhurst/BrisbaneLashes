@@ -19,6 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('master/studios', 'MasterStudioController');
 Route::apiResource('staff', 'StudioStaffController');
+Route::apiResource('appointments', 'AppointmentsController');
+Route::apiResource('customers', 'CustomersController');
+
+Route::post('events', 'EventsController@store');
 
 //Route::post('login/auth','Auth\MasterAuthController@Login');  
 //Route::get('login/destroy','Auth\MasterAuthController@Logout');

@@ -10,7 +10,7 @@ admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locati
     
     // Satellizer configuration that specifies which API
     // route the JWT should be retrieved from
-    $authProvider.loginUrl = 'api/auth/studio';
+    $authProvider.loginUrl = 'api/auth/master';
     
     $stateProvider
         .state('login', {

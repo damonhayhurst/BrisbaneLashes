@@ -68,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\MasterStaff::class,
+            'model' => App\StudioStaff::class,
         ],
     ],
 

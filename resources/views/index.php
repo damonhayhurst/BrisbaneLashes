@@ -20,14 +20,6 @@
         <div ui-view></div>
     </body>
 
-    <script src="bower_resources/angular/angular.min.js"></script>
-    <script src="bower_resources/angular-resource/angular-resource.min.js"></script>
-    <script src="bower_resources/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="bower_resources/satellizer/dist/satellizer.min.js"></script>
-    <script>
-    var resizefunc = [];
-    </script>
-
     <!-- jQuery  -->
     <script src="dark/assets/js/jquery.min.js"></script>
     <script src="dark/assets/js/bootstrap.min.js"></script>
@@ -40,21 +32,40 @@
     <script src="dark/assets/js/jquery.nicescroll.js"></script>
     <script src="dark/assets/js/jquery.scrollTo.min.js"></script>
 
-    <!--form validation init-->
-    <script src="dark/assets/plugins/tinymce/tinymce.min.js"></script>
-
     <script src="dark/assets/js/jquery.core.js"></script>
     <script src="dark/assets/js/jquery.app.js"></script>
 
     <script src="dark/assets/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
     <script src="dark/assets/plugins/select2/select2.min.js" type="text/javascript"></script>
 
-    <script src="dark/assets/plugins/moment/moment.js" type="text/javascript"></script>
-    <script src='dark/assets/plugins/fullcalendar/dist/fullcalendar.min.js' type="text/javascript"></script>
-    <script src="dark/assets/pages/jquery.fullcalendar.js" type="text/javascript"></script>
+    <!--form validation init-->
+    <script src="dark/assets/plugins/tinymce/tinymce.min.js"></script>
+    
+    <script src="bower_resources/angular/angular.min.js"></script>
+    <script src="bower_resources/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_resources/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_resources/satellizer/dist/satellizer.min.js"></script>
+
+    <script>
+    var resizefunc = [];
+    </script>
+    
+    <!-- jquery, moment, and angular have to get included before fullcalendar -->
+    <script type="text/javascript" src="bower_resources/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="bower_resources/angular-ui-calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="bower_resources/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="bower_resources/fullcalendar/dist/gcal.js"></script>
 
     <script src="app/app.js"></script> <!-- load our application -->
     <script src="app/services.js"></script> <!-- load our service -->
     <script src="app/controllers.js"></script> <!-- load our controller -->
     <script src="app/directives.js"></script>
+
+<!--
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript">
+        Stripe.setPublishableKey('pk_test_oi0sKPJYLGjdvOXOM8tE8cMa');
+    </script>
+-->
+
 </html>

@@ -86,7 +86,7 @@ admin.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locat
 
     // Satellizer configuration that specifies which API
     // route the JWT should be retrieved from
-    $authProvider.loginUrl = 'api/auth/studio';
+    $authProvider.loginUrl = 'api/auth/master';
 
     $stateProvider.state('login', {
         url: '/login',
@@ -118,7 +118,7 @@ admin.factory('Studio', function ($resource) {
 /* 2 */
 /***/ (function(module, exports) {
 
-var studio = angular.module('studio', ['ngResource', 'ui.router', 'satellizer']);
+var studio = angular.module('studio', ['ngResource', 'ui.router', 'satellizer', 'ui.calendar']);
 
 studio.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
@@ -186,12 +186,19 @@ studio.config(function ($stateProvider, $urlRouterProvider, $authProvider, $loca
         controller: 'StudioAdminCustomizeEmailTemplatesController'
     }).state('studio.studioStaff.manageProfile', {
         url: '/profile',
-        templateUrl: 'app/templates/studioStaffManageProfile.html',
-        controller: 'StudioStaffManageProfileController'
+        templateUrl: 'app/templates/publicProfile.html',
+        controller: 'StudioProfileController'
     });
 });
 
 //Resource Factories
+studio.factory('Appointment', function ($resource) {
+    return $resource('api/appointments/:id');
+});
+
+studio.factory('Customer', function ($resource) {
+    return $resource('api/customers/:id');
+});
 
 /***/ }),
 /* 3 */

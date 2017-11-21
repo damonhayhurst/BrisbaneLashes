@@ -28,7 +28,18 @@ class authJWT
      * @return mixed
      */
     public function handle($request, Closure $next, $access)
-    {
+    {   
+        $payload = JWTAuth::parseToken()->getPayload();
+        if ($payload['acs'] != self::determineAccess($access)) {
+            return response()->json(['error' => 'Unable to access'], 403);
+        }
+        if ($payload['acs'] == 'm') {
+            \Config::set('jwt.user', 'App\MasterStaff');
+            \Config::set('auth.providers.users.model', \App\MasterStaff::class);
+        } else {
+            \Config::set('jwt.user', 'App\StudioStaff');
+            \Config::set('auth.providers.users.model', \App\StudioStaff::class);
+        }
         try {
             $user = JWTAuth::toUser(JWTAuth::getToken());
         } catch (Exception $e) {
@@ -39,10 +50,6 @@ class authJWT
             }else{
                 return response()->json(['error' => 'Something is wrong'], 500);
             }
-        }
-        $payload = JWTAuth::parseToken()->getPayload();
-        if ($payload['acs'] != self::determineAccess($access)) {
-            return response()->json(['error' => 'Unable to access'], 403);
         }
 //        if ($payload['acs'] == self::STUDIO_STAFF && implode($payload['sid']) != $user->studio_id) {
 //            return response()->json(['error' => 'Unable to access'], 403);

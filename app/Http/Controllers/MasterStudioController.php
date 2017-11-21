@@ -75,7 +75,7 @@ class MasterStudioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         $studio = Studio::find($request->id);
         $studio->delete();

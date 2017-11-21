@@ -3,9 +3,6 @@ studio.controller('StudioStaffViewController', ['$scope', '$state', function($sc
     
     $scope.dashboard = function() {
         $state.go('studio.studioStaff.dashboard', {});
-        setTimeout(function () {
-            $('#calendar').fullCalendar('render');
-        }, 300); // Set enough time to wait until animation finishes;
     };
     
     $scope.bookings = function() {
@@ -43,4 +40,5 @@ studio.controller('StudioStaffViewController', ['$scope', '$state', function($sc
     $scope.manageProfile = function() {
         $state.go('studio.studioStaff.manageProfile', {});
     };
+    
 }]);
