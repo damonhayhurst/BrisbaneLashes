@@ -70,14 +70,24 @@
 __webpack_require__(1);
 __webpack_require__(2);
 __webpack_require__(3);
-module.exports = __webpack_require__(4);
+__webpack_require__(4);
+__webpack_require__(5);
+__webpack_require__(6);
+__webpack_require__(7);
+module.exports = __webpack_require__(8);
 
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-var admin = angular.module('masterAdmin', ['ngResource', 'ui.router', 'satellizer']);
+var shared = angular.module('shared', []);
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var admin = angular.module('masterAdmin', ['ngResource', 'ui.router', 'satellizer', 'shared']);
 
 admin.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
@@ -87,25 +97,6 @@ admin.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locat
     // Satellizer configuration that specifies which API
     // route the JWT should be retrieved from
     $authProvider.loginUrl = 'api/auth/master';
-
-    $stateProvider.state('login', {
-        url: '/login',
-        templateUrl: 'app/templates/login.html',
-        controller: 'MasterLoginController'
-    }).state('admin', {
-        url: '/admin'
-    }).state('admin.addStudio', {
-        url: '/add-studio',
-        templateUrl: 'app/templates/addStudio.html',
-        controller: 'MasterStudioController'
-    }).state('admin.listStudios', {
-        url: '/list-studios',
-        templateUrl: 'app/templates/listStudios.html',
-        controller: 'MasterStudioController'
-    }).state('403', {
-        url: '/forbidden',
-        templateUrl: 'app/templates/page-403.html'
-    });
 });
 
 //Resource Factories
@@ -115,12 +106,34 @@ admin.factory('Studio', function ($resource) {
 });
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports) {
 
-var studio = angular.module('studio', ['ngResource', 'ui.router', 'satellizer', 'ui.calendar']);
+var customer = angular.module('studioCustomer', ['ngResource', 'ui.router', 'satellizer', 'ui.calendar', 'shared']);
 
-studio.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
+customer.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
+
+    $locationProvider.html5Mode(true);
+    $locationProvider.hashPrefix('!');
+
+    // Satellizer configuration that specifies which API
+    // route the JWT should be retrieved from
+    $authProvider.loginUrl = 'api/auth/customer';
+
+    //    $urlRouterProvider.otherwise('/auth');
+});
+
+customer.factory('StudioStaff', function ($resource) {
+    return $resource('api/staff/:id');
+});
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var staff = angular.module('studioStaff', ['ngResource', 'ui.router', 'satellizer', 'ui.calendar', 'shared']);
+
+staff.config(function ($stateProvider, $urlRouterProvider, $authProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
@@ -129,15 +142,91 @@ studio.config(function ($stateProvider, $urlRouterProvider, $authProvider, $loca
     // route the JWT should be retrieved from
     $authProvider.loginUrl = 'api/auth/studio';
 
-    $stateProvider.state('studio', {
+    //    $urlRouterProvider.otherwise('/auth');
+});
+
+//Resource Factories
+staff.factory('Appointment', function ($resource) {
+    return $resource('api/appointments/:id');
+});
+
+staff.factory('Customer', function ($resource) {
+    return $resource('api/customers/:id');
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+var studio = angular.module('studio', []);
+
+studio.config(function () {});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+angular.module('brisbaneLashes', ['masterAdmin', 'studio', 'studioStaff', 'studioCustomer', 'shared']);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+var app = angular.module('brisbaneLashes');
+
+app.config(function ($stateProvider) {
+
+    $stateProvider.state('login', {
+        url: '/login',
+        templateUrl: 'app/templates/login.html',
+        controller: 'MasterLoginController'
+    }).state('admin', {
+        url: '/admin',
+        abstract: true,
+        templateUrl: 'app/templates/masterView.html',
+        controller: 'MasterViewController'
+    }).state('admin.addStudio', {
+        url: '/add-studio',
+        templateUrl: 'app/templates/addStudio.html',
+        controller: 'MasterAddStudioController'
+    }).state('admin.listStudios', {
+        url: '/list-studios',
+        templateUrl: 'app/templates/listStudios.html',
+        controller: 'MasterStudiosController'
+    }).state('403', {
+        url: '/forbidden',
+        templateUrl: 'app/templates/page-403.html'
+    }).state('studio', {
         url: '/studio/:id',
         abstract: true,
         template: '<div ui-view class="wrapper"/>',
-        controller: 'StudioMainController'
-    }).state('studio.login', {
-        url: '/login',
-        templateUrl: 'app/templates/studioLogin.html',
-        controller: 'StudioLoginController'
+        controller: 'StudioMainController',
+        resolve: {
+            studio: function studio($stateParams, $http) {
+                return $http.get('api/public/studios/' + $stateParams.id).then(function (resolve) {
+                    // promise resolve
+                    console.log('Success', resolve.data);
+                    return resolve;
+                });
+            }
+        }
+    }).state('studio.customerLogin', {
+        url: '/customer-login',
+        templateUrl: 'app/templates/studioCustomerLogin.html',
+        controller: 'StudioCustomerLoginController'
+    }).state('studio.staffLogin', {
+        url: '/staff-login',
+        controller: 'StudioStaffLoginController',
+        templateUrl: 'app/templates/studioStaffLogin.html'
+    }).state('studio.customer', {
+        url: '/customer',
+        abstract: true,
+        templateUrl: 'app/templates/studioCustomerView.html',
+        controller: 'StudioCustomerViewController'
+    }).state('studio.customer.bookings', {
+        url: '/bookings',
+        templateUrl: 'app/templates/studioCustomerBookings.html',
+        controller: 'StudioCustomerBookingsController'
     }).state('studio.studioStaff', {
         url: '/staff',
         abstract: true,
@@ -191,25 +280,8 @@ studio.config(function ($stateProvider, $urlRouterProvider, $authProvider, $loca
     });
 });
 
-//Resource Factories
-studio.factory('Appointment', function ($resource) {
-    return $resource('api/appointments/:id');
-});
-
-studio.factory('Customer', function ($resource) {
-    return $resource('api/customers/:id');
-});
-
 /***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-var app = angular.module('brisbaneLashes', ['masterAdmin', 'studio']);
-
-app.config(function () {});
-
-/***/ }),
-/* 4 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

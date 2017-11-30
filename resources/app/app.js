@@ -1,5 +1,1 @@
-var app = angular.module('brisbaneLashes', ['masterAdmin', 'studio']);
-
-app.config(function () {
-    
-});
+angular.module('brisbaneLashes', ['masterAdmin', 'studio', 'studioStaff', 'studioCustomer', 'shared']);

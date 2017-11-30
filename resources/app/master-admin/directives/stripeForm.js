@@ -1,77 +1,80 @@
 var admin = angular.module('masterAdmin');
-admin.directive('stripePaymentForm', function() {
+admin.directive('stripeForm', function() {
     return {
             restrict: 'A',
             replace: true,
-            templateUrl: '/app/templates/stripeForm.html',
-            controller: 'StudioPaymentController',
-            link: function(scope, element, attrs) {
+            templateUrl: 'app/templates/stripeForm.html',
+            controller: function($scope) {
+                var stripe = Stripe('pk_test_7wtYtdXpamfKucG99nnchcrM');
+                
+                // Create an instance of Elements
+                var elements = stripe.elements();
 
-            scope.submitCard = submitCard;
+                // Custom styling can be passed to options when creating an Element.
+                // (Note that this demo uses a wider set of styles than the guide below.)
+                var style = {
+                  base: {
+                    color: '#32325d',
+                    lineHeight: '18px',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                      color: '#aab7c4'
+                    }
+                  },
+                  invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                  }
+                };
 
-            var elements = stripe.elements();
-            var style = {
-                          iconStyle: 'solid',
-                          style: {
-                            base: {
-                              iconColor: '#8898AA',
-                              color: '#000',
-                              lineHeight: '36px',
-                              fontWeight: 300,
-                              fontFamily: 'Helvetica Neue',
-                              fontSize: '19px',
+                // Create an instance of the card Element
+                var card = elements.create('card', {style: style});
 
-                              '::placeholder': {
-                                color: '#8898AA',
-                              },
-                            },
-                            invalid: {
-                              iconColor: '#e85746',
-                              color: '#e85746',
-                            }
-                          },
-                          classes: {
-                            focus: 'is-focused',
-                            empty: 'is-empty',
-                          },
-                        };
-            var card = elements.create('card', style);
-            card.mount('#card-element');
+                // Add an instance of the card Element into the `card-element` <div>
+                card.mount('#card-element');
 
-            // Handle real-time validation errors from the card Element.
-            card.on('change', function(event) {
-                setOutcome(event);
-            });
+                // Handle real-time validation errors from the card Element.
+                card.addEventListener('change', function(event) {
+                  var displayError = document.getElementById('card-errors');
+                  if (event.error) {
+                    displayError.textContent = event.error.message;
+                  } else {
+                    displayError.textContent = '';
+                  }
+                });
 
-            // Form Submit Button Click
-            function submitCard() {
-                var errorElement = document.querySelector('.error');
-                errorElement.classList.remove('visible');
-                createToken();
-            }
+                // Handle form submission
+                var form = document.getElementById('payment-form');
+                form.addEventListener('submit', function(event) {
+                  event.preventDefault();
 
-            // Send data directly to stripe server to create a token (uses stripe.js)
-            function createToken() {
-                stripe.createToken(card).then(setOutcome);
-            }
+                  stripe.createToken(card).then(function(result) {
+                    if (result.error) {
+                      // Inform the user if there was an error
+                      var errorElement = document.getElementById('card-errors');
+                      errorElement.textContent = result.error.message;
+                    } else {
+                      // Send the token to your server
+                      stripeTokenHandler(result.token);
+                    }
+                    });
+                });
+                
+                function stripeTokenHandler(token) {
+                  // Insert the token ID into the form so it gets submitted to the server
+                  var form = document.getElementById('payment-form');
+                  var hiddenInput = document.createElement('input');
+                  hiddenInput.setAttribute('type', 'hidden');
+                  hiddenInput.setAttribute('name', 'stripeToken');
+                  hiddenInput.setAttribute('value', token.id);
+                  form.appendChild(hiddenInput);
 
-            // Common SetOutcome Function
-            function setOutcome(result) {
-                var errorElement = document.querySelector('.error');
-                errorElement.classList.remove('visible');
-                if (result.token) {
-                  // Use the token to create a charge or a customer
-                  stripeTokenHandler(result.token);
-                } else if (result.error) {
-                  errorElement.textContent = result.error.message;
-                  errorElement.classList.add('visible');
+                  // Submit the form
+                  form.submit();
                 }
+                                      
             }
-
-            // Response Handler callback to handle the response from Stripe server
-            function stripeTokenHandler(token) {
-                //stripe webhook
-            }
-        }
     }
 });

@@ -36,9 +36,12 @@ class authJWT
         if ($payload['acs'] == 'm') {
             \Config::set('jwt.user', 'App\MasterStaff');
             \Config::set('auth.providers.users.model', \App\MasterStaff::class);
-        } else {
+        } else if ($payload['acs'] == 's') {
             \Config::set('jwt.user', 'App\StudioStaff');
             \Config::set('auth.providers.users.model', \App\StudioStaff::class);
+        } else {
+            \Config::set('jwt.user', 'App\Customer');
+            \Config::set('auth.providers.users.model', \App\Customer::class);
         }
         try {
             $user = JWTAuth::toUser(JWTAuth::getToken());

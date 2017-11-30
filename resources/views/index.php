@@ -61,6 +61,8 @@
     <script src="app/controllers.js"></script> <!-- load our controller -->
     <script src="app/directives.js"></script>
 
+    <script src="https://js.stripe.com/v3/"></script>
+
 <!--
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <script type="text/javascript">

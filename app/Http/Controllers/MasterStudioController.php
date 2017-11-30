@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Studio;
+use App\Traits\StripePayment;
 
 /**
 * Controller for Studio entity.
 */
 class MasterStudioController extends Controller
-{
+{   
+    use StripePayment;
     
     public function __construct() {
         $this->middleware('jwt-auth:master');
@@ -38,10 +40,9 @@ class MasterStudioController extends Controller
         $item = new Studio;
         $item = $this->assignProperties($item, $request);
         $item->save();
-        return response()->json($item);
-        return 'OK';
+        return $this->createStudioSubscription($item, $request->input('stripeToken'));
     }
-
+    
     /**
      * Display the specified resource.
      *

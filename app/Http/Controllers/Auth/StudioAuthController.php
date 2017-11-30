@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class StudioAuthController extends Controller {
     
     public function login(Request $request) {
+        \Config::set('jwt.user', 'App\StudioStaff');
+        \Config::set('auth.providers.users.model', \App\StudioStaff::class);
         $credentials = $request->only('email', 'password');
         $token = null;
         try {
@@ -26,8 +28,4 @@ class StudioAuthController extends Controller {
         return response()->json(compact('token'));
     }
 
-    public function getAuthUser(Request $request){
-        $user = \JWTAuth::toUser($request->token);        
-        return response()->json(['result' => $user]);
-    }
 }

@@ -1,6 +1,8 @@
+var shared = angular.module('shared', []);
 var admin = angular.module('masterAdmin', ['ngResource',
                                             'ui.router',
                                             'satellizer',
+                                           'shared'
                                             ]);
 
 admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider){
@@ -12,29 +14,7 @@ admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locati
     // route the JWT should be retrieved from
     $authProvider.loginUrl = 'api/auth/master';
     
-    $stateProvider
-        .state('login', {
-            url: '/login',
-            templateUrl: 'app/templates/login.html',
-            controller: 'MasterLoginController'
-        })
-        .state('admin', {
-            url: '/admin',
-        })
-        .state('admin.addStudio', {
-            url: '/add-studio',
-            templateUrl: 'app/templates/addStudio.html',
-            controller: 'MasterStudioController'
-        })
-        .state('admin.listStudios', {
-            url: '/list-studios',
-            templateUrl: 'app/templates/listStudios.html',
-            controller: 'MasterStudioController'
-        })
-        .state('403', {
-            url: '/forbidden',
-            templateUrl: 'app/templates/page-403.html'
-        });
+    
 });
 
 //Resource Factories
@@ -42,14 +22,41 @@ admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locati
 admin.factory('Studio', function($resource) {
     return $resource('api/master/studios/:id');
 });
-var studio = angular.module('studio', ['ngResource',
+var customer = angular.module('studioCustomer', ['ngResource',
                                             'ui.router',
                                             'satellizer',
-                                            'ui.calendar'
+                                            'ui.calendar',
+                                            'shared'
                                             ]);
 
 
-studio.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider){
+customer.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider){
+    
+    $locationProvider.html5Mode(true);
+    $locationProvider.hashPrefix('!');
+    
+    // Satellizer configuration that specifies which API
+    // route the JWT should be retrieved from
+    $authProvider.loginUrl = 'api/auth/customer';
+    
+    
+//    $urlRouterProvider.otherwise('/auth');
+        
+});
+
+customer.factory('StudioStaff', function($resource) {
+    return $resource('api/staff/:id');
+});
+
+var staff = angular.module('studioStaff', ['ngResource',
+                                            'ui.router',
+                                            'satellizer',
+                                            'ui.calendar',
+                                            'shared'
+                                            ]);
+
+
+staff.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider){
     
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
@@ -58,17 +65,97 @@ studio.config(function($stateProvider, $urlRouterProvider, $authProvider, $locat
     // route the JWT should be retrieved from
     $authProvider.loginUrl = 'api/auth/studio';
     
+    
+//    $urlRouterProvider.otherwise('/auth');
+        
+});
+
+//Resource Factories
+staff.factory('Appointment', function($resource) {
+    return $resource('api/appointments/:id');
+});
+
+staff.factory('Customer', function($resource) {
+    return $resource('api/customers/:id');
+});
+
+var studio = angular.module('studio', []);
+
+
+studio.config(function(){
+    
+        
+});
+
+
+
+angular.module('brisbaneLashes', ['masterAdmin', 'studio', 'studioStaff', 'studioCustomer', 'shared']);
+var app = angular.module('brisbaneLashes');
+
+app.config(function($stateProvider){
+    
     $stateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: 'app/templates/login.html',
+            controller: 'MasterLoginController'
+        })
+        .state('admin', {
+            url: '/admin',
+            abstract: true,
+            templateUrl: 'app/templates/masterView.html',
+            controller: 'MasterViewController'
+        })
+        .state('admin.addStudio', {
+            url: '/add-studio',
+            templateUrl: 'app/templates/addStudio.html',
+            controller: 'MasterAddStudioController'
+        })
+        .state('admin.listStudios', {
+            url: '/list-studios',
+            templateUrl: 'app/templates/listStudios.html',
+            controller: 'MasterStudiosController'
+        })
+        .state('403', {
+            url: '/forbidden',
+            templateUrl: 'app/templates/page-403.html'
+        })
         .state('studio', {
             url: '/studio/:id',
             abstract: true,
             template: '<div ui-view class="wrapper"/>',
-            controller: 'StudioMainController'
+            controller: 'StudioMainController',
+            resolve: {
+                studio: function($stateParams, $http) {
+                    return $http.get('api/public/studios/' + $stateParams.id).then(
+                        (resolve) => {   // promise resolve
+                            console.log('Success',resolve.data);
+                            return resolve;
+                        }
+                    );
+                }
+            }
+        })               
+        .state('studio.customerLogin', {
+            url: '/customer-login',
+            templateUrl: 'app/templates/studioCustomerLogin.html',
+            controller: 'StudioCustomerLoginController'
         })
-        .state('studio.login', {
-            url: '/login',
-            templateUrl: 'app/templates/studioLogin.html',
-            controller: 'StudioLoginController'
+        .state('studio.staffLogin', {
+            url: '/staff-login',
+            controller: 'StudioStaffLoginController',
+            templateUrl: 'app/templates/studioStaffLogin.html'
+        })
+        .state('studio.customer', {
+            url: '/customer',
+            abstract: true,
+            templateUrl: 'app/templates/studioCustomerView.html',
+            controller: 'StudioCustomerViewController'
+        })
+        .state('studio.customer.bookings', {
+            url: '/bookings',
+            templateUrl: 'app/templates/studioCustomerBookings.html',
+            controller: 'StudioCustomerBookingsController'
         })
         .state('studio.studioStaff', {
             url: '/staff',
@@ -131,20 +218,6 @@ studio.config(function($stateProvider, $urlRouterProvider, $authProvider, $locat
             url: '/profile',
             templateUrl: 'app/templates/publicProfile.html',
             controller: 'StudioProfileController'
-        })
-});
-
-//Resource Factories
-studio.factory('Appointment', function($resource) {
-    return $resource('api/appointments/:id');
-});
-
-studio.factory('Customer', function($resource) {
-    return $resource('api/customers/:id');
-});
-
-var app = angular.module('brisbaneLashes', ['masterAdmin', 'studio']);
-
-app.config(function () {
+        });
     
 });

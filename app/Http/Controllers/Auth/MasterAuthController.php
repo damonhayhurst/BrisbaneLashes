@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class MasterAuthController extends Controller {
     
     public function login(Request $request) {
+        \Config::set('jwt.user', 'App\MasterStaff');
+        \Config::set('auth.providers.users.model', \App\MasterStaff::class);
         $credentials = $request->only('email', 'password');
         $token = null;
         try {
@@ -22,10 +24,5 @@ class MasterAuthController extends Controller {
 		    ], 500);
 		}
         return response()->json(compact('token'));
-    }
-
-    public function getAuthUser(Request $request){
-        $user = \JWTAuth::toUser($request->token);        
-        return response()->json(['result' => $user]);
     }
 }

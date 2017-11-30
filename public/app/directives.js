@@ -1,88 +1,4 @@
-var admin = angular.module('masterAdmin');
-admin.directive('stripePaymentForm', function() {
-    return {
-            restrict: 'A',
-            replace: true,
-            templateUrl: '/app/templates/stripeForm.html',
-            controller: 'StudioPaymentController',
-            link: function(scope, element, attrs) {
-
-            scope.submitCard = submitCard;
-
-            var elements = stripe.elements();
-            var style = {
-                          iconStyle: 'solid',
-                          style: {
-                            base: {
-                              iconColor: '#8898AA',
-                              color: '#000',
-                              lineHeight: '36px',
-                              fontWeight: 300,
-                              fontFamily: 'Helvetica Neue',
-                              fontSize: '19px',
-
-                              '::placeholder': {
-                                color: '#8898AA',
-                              },
-                            },
-                            invalid: {
-                              iconColor: '#e85746',
-                              color: '#e85746',
-                            }
-                          },
-                          classes: {
-                            focus: 'is-focused',
-                            empty: 'is-empty',
-                          },
-                        };
-            var card = elements.create('card', style);
-            card.mount('#card-element');
-
-            // Handle real-time validation errors from the card Element.
-            card.on('change', function(event) {
-                setOutcome(event);
-            });
-
-            // Form Submit Button Click
-            function submitCard() {
-                var errorElement = document.querySelector('.error');
-                errorElement.classList.remove('visible');
-                createToken();
-            }
-
-            // Send data directly to stripe server to create a token (uses stripe.js)
-            function createToken() {
-                stripe.createToken(card).then(setOutcome);
-            }
-
-            // Common SetOutcome Function
-            function setOutcome(result) {
-                var errorElement = document.querySelector('.error');
-                errorElement.classList.remove('visible');
-                if (result.token) {
-                  // Use the token to create a charge or a customer
-                  stripeTokenHandler(result.token);
-                } else if (result.error) {
-                  errorElement.textContent = result.error.message;
-                  errorElement.classList.add('visible');
-                }
-            }
-
-            // Response Handler callback to handle the response from Stripe server
-            function stripeTokenHandler(token) {
-                //stripe webhook
-            }
-        }
-    }
-});
-var studio = angular.module('studio');
-studio.directive('leftSideBar', ['$state', function($state) {
-    return {
-        templateUrl: 'app/templates/leftSideBar.html',
-        controller: 'StudioStaffViewController'
-    };
-}]);
-var studio = angular.module('studio');
+var shared = angular.module('shared');
 studio.directive('pageTitle', [function() {
     return {
         templateUrl: '/app/templates/pageTitle.html',
@@ -91,13 +7,6 @@ studio.directive('pageTitle', [function() {
             subtitle: '@'
         },
         controller: 'PageTitleController'
-    };
-}]);
-var studio = angular.module('studio');
-studio.directive('topBar', [function() {
-    return {
-        templateUrl: '/app/templates/topBar.html',
-        controller: 'StudioStaffViewController'
     };
 }]);
 var studio = angular.module('studio');
@@ -134,3 +43,125 @@ studio.directive('wysiwig', ['$state', function($state) {
         },
     };
 }])
+var admin = angular.module('masterAdmin');
+admin.directive('masterAdminLeftSideBar', ['$state', function($state) {
+    return {
+        templateUrl: 'app/templates/masterAdminLeftSideBar.html',
+        controller: 'MasterViewController'
+    };
+}]);
+var admin = angular.module('masterAdmin');
+admin.directive('masterAdminTopBar', ['$state', function($state) {
+    return {
+        templateUrl: 'app/templates/masterAdminTopBar.html',
+        controller: 'MasterViewController'
+    };
+}]);
+var admin = angular.module('masterAdmin');
+admin.directive('stripeForm', function() {
+    return {
+            restrict: 'A',
+            replace: true,
+            templateUrl: 'app/templates/stripeForm.html',
+            controller: function($scope) {
+                var stripe = Stripe('pk_test_7wtYtdXpamfKucG99nnchcrM');
+                
+                // Create an instance of Elements
+                var elements = stripe.elements();
+
+                // Custom styling can be passed to options when creating an Element.
+                // (Note that this demo uses a wider set of styles than the guide below.)
+                var style = {
+                  base: {
+                    color: '#32325d',
+                    lineHeight: '18px',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                      color: '#aab7c4'
+                    }
+                  },
+                  invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                  }
+                };
+
+                // Create an instance of the card Element
+                var card = elements.create('card', {style: style});
+
+                // Add an instance of the card Element into the `card-element` <div>
+                card.mount('#card-element');
+
+                // Handle real-time validation errors from the card Element.
+                card.addEventListener('change', function(event) {
+                  var displayError = document.getElementById('card-errors');
+                  if (event.error) {
+                    displayError.textContent = event.error.message;
+                  } else {
+                    displayError.textContent = '';
+                  }
+                });
+
+                // Handle form submission
+                var form = document.getElementById('payment-form');
+                form.addEventListener('submit', function(event) {
+                  event.preventDefault();
+
+                  stripe.createToken(card).then(function(result) {
+                    if (result.error) {
+                      // Inform the user if there was an error
+                      var errorElement = document.getElementById('card-errors');
+                      errorElement.textContent = result.error.message;
+                    } else {
+                      // Send the token to your server
+                      stripeTokenHandler(result.token);
+                    }
+                    });
+                });
+                
+                function stripeTokenHandler(token) {
+                  // Insert the token ID into the form so it gets submitted to the server
+                  var form = document.getElementById('payment-form');
+                  var hiddenInput = document.createElement('input');
+                  hiddenInput.setAttribute('type', 'hidden');
+                  hiddenInput.setAttribute('name', 'stripeToken');
+                  hiddenInput.setAttribute('value', token.id);
+                  form.appendChild(hiddenInput);
+
+                  // Submit the form
+                  form.submit();
+                }
+                                      
+            }
+    }
+});
+var staff = angular.module('studioStaff');
+staff.directive('studioStaffLeftSideBar', ['$state', function($state) {
+    return {
+        templateUrl: 'app/templates/StudioStaffLeftSideBar.html',
+        controller: 'StudioStaffViewController'
+    };
+}]);
+var staff = angular.module('studioStaff');
+studio.directive('studioStaffTopBar', [function() {
+    return {
+        templateUrl: '/app/templates/studioStaffTopBar.html',
+        controller: 'StudioStaffViewController'
+    };
+}]);
+var customer = angular.module('studioCustomer');
+customer.directive('studioCustomerLeftSideBar', ['$state', function($state) {
+    return {
+        templateUrl: 'app/templates/studioCustomerLeftSideBar.html',
+        controller: 'StudioCustomerViewController'
+    };
+}]);
+var customer = angular.module('studioCustomer');
+customer.directive('studioCustomerTopBar', [function() {
+    return {
+        templateUrl: '/app/templates/studioCustomerTopBar.html',
+        controller: 'CustomerViewController'
+    };
+}]);

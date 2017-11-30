@@ -19,10 +19,9 @@ class CreateEventsTable extends Migration
             $table->integer('employee_assigned_id')->unsigned();
             $table->integer('client_id')->unsigned()->nullable();
             $table->integer('studio_id')->unsigned();
-            $table->boolean('all_day');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->decimal('price', 6, 2);
+            $table->dateTime('start');
+            $table->dateTime('end');
+            $table->decimal('price', 6, 2)->nullable();
             $table->decimal('final_price', 6, 2)->nullable();
             $table->string('notes')->nullable();
             $table->string('category');

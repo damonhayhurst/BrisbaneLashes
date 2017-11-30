@@ -1,6 +1,7 @@
 var admin = angular.module('masterAdmin', ['ngResource',
                                             'ui.router',
                                             'satellizer',
+                                           'shared'
                                             ]);
 
 admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locationProvider){
@@ -12,29 +13,7 @@ admin.config(function($stateProvider, $urlRouterProvider, $authProvider, $locati
     // route the JWT should be retrieved from
     $authProvider.loginUrl = 'api/auth/master';
     
-    $stateProvider
-        .state('login', {
-            url: '/login',
-            templateUrl: 'app/templates/login.html',
-            controller: 'MasterLoginController'
-        })
-        .state('admin', {
-            url: '/admin',
-        })
-        .state('admin.addStudio', {
-            url: '/add-studio',
-            templateUrl: 'app/templates/addStudio.html',
-            controller: 'MasterStudioController'
-        })
-        .state('admin.listStudios', {
-            url: '/list-studios',
-            templateUrl: 'app/templates/listStudios.html',
-            controller: 'MasterStudioController'
-        })
-        .state('403', {
-            url: '/forbidden',
-            templateUrl: 'app/templates/page-403.html'
-        });
+    
 });
 
 //Resource Factories
